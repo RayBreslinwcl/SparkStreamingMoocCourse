@@ -239,7 +239,55 @@ public class HbaseUtils_DDLtest {
             System.out.println("----------------------------------------");
         }
 
+    }
 
+    //================================HBASE1.0+=======================================
+    public static Configuration getHBaseConf(){
+        Configuration conf = HBaseConfiguration.create();
+        conf.set("hbase.rootdir","hdfs://hadoop:8020/hbase");
+        conf.set("hbase.zookeeper.quorum","hadoop");
+        conf.set("hbase.zookeeper.property.clientPort","2181");
+        return conf;
+    }
+
+    /**
+     * 备注：对于hbase1.+版本，建议采用下面接口创建连接操作Hbase
+     * createTable：创建namespace，表名，列簇。
+     * @throws Exception
+     */
+    @SuppressWarnings("resource")
+	@Test
+    public static void createTable_1plus() throws Exception {
+        String nameSpace = "hadoop";
+        String tbName = "actor_1pluse";
+        String colFamily = "info";
+        // 1.读取配置文件
+        Configuration conf=HbaseUtils_DDLtest.getHBaseConf();
+
+        Connection connection;
+        connection = ConnectionFactory.createConnection(conf);
+
+        // 2.创建一个管理员，管理表格的创建和删除
+//        HBaseAdmin admin = new HBaseAdmin(conf);
+        Admin admin=connection.getAdmin();
+
+        // 3.创建命名空间描述器
+        NamespaceDescriptor ns = NamespaceDescriptor.create(nameSpace).build();
+
+        // 4.创建表格，表格对象
+        TableName tableName = TableName.valueOf(nameSpace + ":" + tbName);
+        // 创建表的描述器
+        HTableDescriptor tableDesc = new HTableDescriptor(tableName);
+        // 5.创建列簇的描述器
+        HColumnDescriptor columnDesc = new HColumnDescriptor(colFamily);
+        // 6.将列簇添加到表的描述器
+        tableDesc.addFamily(columnDesc);
+        // 7.创建命名空间，创建表
+        admin.createNamespace(ns);
+        admin.createTable(tableDesc);
+        System.out.println("创建表   " + nameSpace + ":" + tbName + "  成功");
+
+//        TableName tablename=TableName.valueOf("")
     }
 
 
