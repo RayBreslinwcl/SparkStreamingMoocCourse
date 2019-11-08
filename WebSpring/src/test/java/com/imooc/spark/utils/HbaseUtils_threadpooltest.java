@@ -19,6 +19,7 @@ import java.util.Map;
 
 /**
  * Created by Administrator on 2019/11/8.
+ * HbaseUtils_threadpool类的测试类，证实Hbase连接池可用
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
