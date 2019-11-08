@@ -16,6 +16,9 @@ import java.util.Map;
  */
 @Component
 public class CourseClickCountDAO {
+
+
+
     public List<CourseClickCount> query(String day) throws Exception{
         List<CourseClickCount> list =new ArrayList<>();
 

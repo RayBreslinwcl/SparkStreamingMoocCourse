@@ -9,15 +9,21 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Administrator on 2018/9/26.
  * HBase操作工具类:Java工具类建议采用单例模式封装
  *
  */
+
 public class HBaseUtils {
-    HBaseAdmin admin=null;
-    Configuration configuration=null;
+    static HBaseAdmin admin=null;
+    static Configuration configuration=null;
+
+    //创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待
+    static ExecutorService executorService=null;
 
     /**
      * 私有改造方法
@@ -28,6 +34,7 @@ public class HBaseUtils {
 //        configuration.set("hbase.zookeeper.quorum","bigdata.ibeifeng.com:2181");
         configuration.set("hbase.rootdir","hdfs://hadoop:8020/hbase");
         configuration.set("hbase.zookeeper.quorum","hadoop:2181");
+
         try {
             admin =new HBaseAdmin(configuration);
         } catch (IOException e) {
@@ -62,7 +69,7 @@ public class HBaseUtils {
 
         HTable table=getTable(tablename);
         String cf="info";
-        String qualifier="click_count";
+        String qualifier="  ";
         Scan scan=new Scan();
 
         Filter filter=new PrefixFilter(Bytes.toBytes(dayCourse));
