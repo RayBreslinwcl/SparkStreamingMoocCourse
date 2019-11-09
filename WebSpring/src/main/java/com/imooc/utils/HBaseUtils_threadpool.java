@@ -154,7 +154,7 @@ public class HBaseUtils_threadpool {
      * @param tablename 表名
      * @param rowkey 行键
      * @param family 列簇
-     * @param cloumns 列
+     * @param columns 列
      * @throws IOException
      */
     public static void put(String tablename, String rowkey, String family, Map<String,String> columns) throws IOException{
