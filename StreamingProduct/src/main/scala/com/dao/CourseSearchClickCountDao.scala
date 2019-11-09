@@ -52,15 +52,15 @@ object CourseSearchClickCountDao {
 
   def main(args: Array[String]): Unit = {
     val list=new ListBuffer[CourseSearchClickCount]
-    list.append(CourseSearchClickCount("20171111_www.baidu.com_8",8))
-    list.append(CourseSearchClickCount("20171111_cn.bing.com_9",8))
+    list.append(CourseSearchClickCount("20191111_www.baidu.com_8",8))
+    list.append(CourseSearchClickCount("20191111_cn.bing.com_9",8))
 
-    //测试一：保存
-//    save(list)
+    //测试一：保存【20191109测试成功】
+    save(list)
 
     //测试二：读取
     //    println(count("20171111_8")+":"+count("20171111_9")+":"+count("20171111_10"))
-    println(count("20171111_www.baidu.com_8")+":"+count("20171111_cn.bing.com_9"))
+//    println(count("20171111_www.baidu.com_8")+":"+count("20171111_cn.bing.com_9"))
 
   }
 }

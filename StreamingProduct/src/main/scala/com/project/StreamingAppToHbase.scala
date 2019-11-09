@@ -14,7 +14,7 @@ import scala.collection.mutable.ListBuffer
 object StreamingAppToHbase {
 
   def main(args: Array[String]): Unit = {
-    val sparkconf=new SparkConf().setAppName("KafkaReceiver").setMaster("local[*]")
+    val sparkconf=new SparkConf().setAppName("KafkaReceiver").setMaster("local[2]")
     val sc=new SparkContext(sparkconf)
     val ssc=new StreamingContext(sc,Seconds(5))
 
@@ -46,7 +46,7 @@ object StreamingAppToHbase {
       }
       Clicklog(ip,time,courseId,infos(3).toInt,infos(4))
     }).filter(Clicklog=>Clicklog.couserId!=0) //过滤
-//    cleanData.print()
+    cleanData.print()
 
     //第三步：统计今天为止的课程访问量【pass】【统计功能一20181124updtae】
     //HBase中rowkey操作20171111_9
@@ -74,27 +74,28 @@ object StreamingAppToHbase {
 
 
     //第四步：统计从搜索殷勤过来的今天到现在为止实战课程的访问量
-    //原始数据 https://search.yahoo.com/search?p=Storm实战-》目标search.yahoo.com
-//    cleanData.map(x=>{
-//      val referer=x.referer.replaceAll("//","/")
-//      val splits=referer.split("/")
-//      var host=""
-//      if(splits.length>2){
-//        host=splits(1)
-//        }
-//      (host,x.couserId,x.time)
-//    }
-//    ).filter(_._1!="").map(x=>{
-//      (x._3.substring(0,8)+"_"+x._1+"_"+x._2,1)
-//    }).reduceByKey(_+_).foreachRDD(RDD=>{
-//      RDD.foreachPartition(partitions=>{
-//        val list=new ListBuffer[CourseSearchClickCount]
-//        partitions.foreach(pair=>{
-//          list.append(CourseSearchClickCount(pair._1,pair._2))
-//        })
-//        CourseSearchClickCountDao.save(list)
-//      })
-//    })
+    //原始数据 x.referer=https://search.yahoo.com/search?p=Storm实战-》目标search.yahoo.com
+    //存储到hbase数据格式：20191109_www.baidu.com_131  column=info:click_count, timestamp=1573273644333, value=\x00\x00\x00\x00\x00\x00\x00\x02
+    cleanData.map(x=>{
+      val referer=x.referer.replaceAll("//","/")
+      val splits=referer.split("/")
+      var host=""
+      if(splits.length>2){
+        host=splits(1)
+        }
+      (host,x.couserId,x.time)
+    }
+    ).filter(_._1!="").map(x=>{
+      (x._3.substring(0,8)+"_"+x._1+"_"+x._2,1)
+    }).reduceByKey(_+_).foreachRDD(RDD=>{
+      RDD.foreachPartition(partitions=>{
+        val list=new ListBuffer[CourseSearchClickCount]
+        partitions.foreach(pair=>{
+          list.append(CourseSearchClickCount(pair._1,pair._2))
+        })
+        CourseSearchClickCountDao.save(list)
+      })
+    })
 
 
     ssc.start()
