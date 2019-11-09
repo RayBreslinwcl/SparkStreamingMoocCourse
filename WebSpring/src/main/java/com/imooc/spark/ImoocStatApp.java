@@ -140,4 +140,13 @@ public class ImoocStatApp {
     public ModelAndView echarts(){
         return new ModelAndView("echarts");
     }
+
+    /**
+     * 大屏展示
+     * @return
+     */
+    @RequestMapping(value = "/demo_time",method = RequestMethod.GET)
+    public ModelAndView echartsBig(){
+        return new ModelAndView("demo_time");
+    }
 }
