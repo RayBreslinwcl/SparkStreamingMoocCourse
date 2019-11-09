@@ -8,7 +8,7 @@
     <script src="js/echarts.min.js"></script>
     <!-- 引入 jquery 文件 -->
     <script src="js/jquery.js"></script>
-    <!--<link rel="stylesheet" href="../css/style.css">-->
+    <!--<link rel="stylesheet" href="../static/css/style.css">&lt;!&ndash;测试环境&ndash;&gt;-->
     <link rel="stylesheet" href="css/style.css"> <!--生产环境-->
 
 </head>
@@ -20,8 +20,8 @@
         <div class="box-left">
             <div class="left-top">
                 <div class="current-num">
-                    <div align="center" style="color: azure;font-size:20px"> 总课程访问量</div>
-                    <p align="center" style="color: azure;font-size:20px" >123,456,789</p>
+                    <div align="center" style="color: azure;font-size:20px;margin-top: 10%" > 总课程访问量</div>
+                    <p align="center" style="color: azure;font-size:20px;margin-top:18px" >123,456,789</p>
                 </div>
             </div>
             <div class="left-center">
@@ -44,7 +44,8 @@
                     <h6 align="center" style="color: azure;font-size:20px"><strong>慕课网搜索引擎来源</strong></h6>
                     <img class="line-img" src="images/line-blue.png" alt="">
                 </div>
-                <div class="chart-box">
+                <div class="chart-box" id="mainSearchCount">
+
 
                 </div>
             </div>
@@ -73,6 +74,7 @@
     <!--&lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;-->
     <!--<div id="main" style="width: 600px;height:400px;position: absolute;top:50%;left: 50%;margin-top: -200px;margin-left: -300px;"></div>-->
 
+    <!--课程点击量-->
     <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('mainCourseClick'));
@@ -124,6 +126,59 @@
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+    </script>
+    <!--搜索引擎引流量-->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart2 = echarts.init(document.getElementById('mainSearchCount'));
+
+        // 指定图表的配置项和数据
+        option = {
+            title : {
+//                text: '实战课程访问次数',
+//                subtext: '实战课程访问次数',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series : [
+                {
+                    name: '访问次数',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:(function(){ //<![CDATA[
+                        var datas = [];
+                        $.ajax({
+                            type: "POST",
+                            url: "/imooc/course_searchclickcount_dynamic",
+                            dataType: 'json',
+                            async: false,
+                            success: function(result) {
+                                for(var i=0; i<result.length; i++) {
+                                    datas.push({"value":result[i].value, "name":result[i].name})
+                                }
+                            }
+                        })
+                        return datas;
+                        //]]>
+                    })(),
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart2.setOption(option);
     </script>
 </body>
 
