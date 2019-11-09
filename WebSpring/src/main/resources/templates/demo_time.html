@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>imooc_stat</title>
+
+    <!-- 引入 ECharts 文件 -->
+    <script src="js/echarts.min.js"></script>
+    <!-- 引入 jquery 文件 -->
+    <script src="js/jquery.js"></script>
+    <!--<link rel="stylesheet" href="../css/style.css">-->
+    <link rel="stylesheet" href="css/style.css"> <!--生产环境-->
+
+</head>
+<body>
+
+    <div class="container-flex" tabindex="0" hidefocus="true">
+
+        <!--左侧-->
+        <div class="box-left">
+            <div class="left-top">
+                <div class="current-num">
+                    <div align="center" style="color: azure;font-size:20px"> 总课程访问量</div>
+                    <p align="center" style="color: azure;font-size:20px" >123,456,789</p>
+                </div>
+            </div>
+            <div class="left-center">
+                <div class="title-box">
+                    <h6 align="center" style="color: azure;font-size:20px"><strong>慕课网课程点击量</strong></h6>
+                </div>
+                <!--<div class="chart-box ">-->
+                <div class="chart-box " id="mainCourseClick">
+                    <!--<div id="pie"></div>-->
+                    <!--<div>-->
+                    <!--&lt;!&ndash;<div class="pie-data">&ndash;&gt;-->
+
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <!--<div class="left-bottom" class="select">-->
+            <div class="left-bottom" >
+                <div class="title-box">
+                    <h6 align="center" style="color: azure;font-size:20px"><strong>慕课网搜索引擎来源</strong></h6>
+                    <img class="line-img" src="images/line-blue.png" alt="">
+                </div>
+                <div class="chart-box">
+
+                </div>
+            </div>
+        </div>
+        <!--中心-->
+        <div class="box-center">
+            <div class="center-top">
+                <h1 align="center" style="font-size: 25px;color: beige "><strong>慕课网课程统计大屏</strong> </h1>
+            </div>
+            <div class="center-center">
+
+
+            </div>
+            <div class="center-bottom">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--<input id="time" type="date" />-->
+
+
+
+    <!--&lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;-->
+    <!--<div id="main" style="width: 600px;height:400px;position: absolute;top:50%;left: 50%;margin-top: -200px;margin-left: -300px;"></div>-->
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('mainCourseClick'));
+
+        // 指定图表的配置项和数据
+        option = {
+            title : {
+//                text: '实战课程访问次数',
+//                subtext: '实战课程访问次数',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+
+            series : [
+                {
+                    name: '访问次数',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:(function(){ //<![CDATA[
+                        var datas = [];
+                        $.ajax({
+                            type: "POST",
+                            url: "/imooc/course_clickcount_dynamic",
+                            dataType: 'json',
+                            async: false,
+                            success: function(result) {
+                                for(var i=0; i<result.length; i++) {
+                                    datas.push({"value":result[i].value, "name":result[i].name})
+                                }
+                            }
+                        })
+                        return datas;
+                        //]]>
+                    })(),
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+
+<script>
+//        /*获取当前时间*/
+var time = new Date();
+//        /*格式化日，如果小于9，则补0*/
+var day = ("0" + time.getDate()).slice(-2);
+//        /*格式化月，如果小于9，则补0*/
+var month = ("0" + (time.getMonth() + 1)).slice(-2);
+//        /*拼接日期*/
+var today = time.getFullYear() + "-" + (month) + "-" + (day);
+//        /*完成赋值操作*/
+document.getElementById("time").value=today;
+</script>
+
+</html>
