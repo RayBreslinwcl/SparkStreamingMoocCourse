@@ -11,10 +11,7 @@ import com.imooc.domain.CourseClickCount;
 import com.imooc.domain.CourseSearchClickCount;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
@@ -90,12 +87,14 @@ public class ImoocStatApp {
 //        return view;
     }
 
-    /**
+     /**
      * 获得某日某个引擎引流过来的点击量
+     * @param datetime 某日，格式例如：20191109
+     * @param searchengine 某个搜索引擎，例如：search.yahoo.com
      * @return
      * @throws Exception
      * 验证：
-     [
+    [
     {
     "name": "Spark SQL慕课网日志分析",
     "value": 2
@@ -108,13 +107,14 @@ public class ImoocStatApp {
      */
     @RequestMapping(value="/course_searchclickcount_dynamic",method = RequestMethod.POST)
     @ResponseBody
-    public List<CourseSearchClickCount> courseSearchClickCount() throws Exception{
+    public List<CourseSearchClickCount> courseSearchClickCount(@RequestParam(value = "datetime") String datetime,@RequestParam(name = "searchengine" ) String searchengine) throws Exception{
 //    public ModelAndView courseClickCount() throws Exception{
         //自己添加修改20181126，否则总是一天的。
 //        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 //        String date = df.format(new Date());
 
-        List<CourseSearchClickCount> list = courseSearchClickCountDAO.queryDayEngineCourse("20191109","search.yahoo.com");
+//        List<CourseSearchClickCount> list = courseSearchClickCountDAO.queryDayEngineCourse("20191109","search.yahoo.com");
+        List<CourseSearchClickCount> list = courseSearchClickCountDAO.queryDayEngineCourse(datetime,searchengine);
         //        List<CourseClickCount> list = courseClickCountDAO.query(date);
         for (CourseSearchClickCount model:list ){
             try {

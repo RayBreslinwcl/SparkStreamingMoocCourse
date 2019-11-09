@@ -8,7 +8,7 @@
     <script src="js/echarts.min.js"></script>
     <!-- 引入 jquery 文件 -->
     <script src="js/jquery.js"></script>
-    <!--<link rel="stylesheet" href="../static/css/style.css">&lt;!&ndash;测试环境&ndash;&gt;-->
+    <link rel="stylesheet" href="../static/css/style.css"><!--测试环境-->
     <link rel="stylesheet" href="css/style.css"> <!--生产环境-->
 
 </head>
@@ -55,11 +55,12 @@
             <div class="center-top">
                 <h1 align="center" style="font-size: 25px;color: beige "><strong>慕课网课程统计大屏</strong> </h1>
             </div>
-            <div class="center-center">
+            <div class="center-center" >
 
 
             </div>
-            <div class="center-bottom">
+            <!--搜索引擎引流量Circle图-->
+            <div class="center-bottom" id="mainCircle">
 
             </div>
 
@@ -154,7 +155,7 @@
                         var datas = [];
                         $.ajax({
                             type: "POST",
-                            url: "/imooc/course_searchclickcount_dynamic",
+                            url: "/imooc/course_searchclickcount_dynamic?datetime=20191109&searchengine=www.baidu.com",
                             dataType: 'json',
                             async: false,
                             success: function(result) {
@@ -179,6 +180,79 @@
 
         // 使用刚指定的配置项和数据显示图表。
         myChart2.setOption(option);
+    </script>
+
+    <!--搜索引擎引流量第二个-->
+    <!--环形图-->
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('mainCircle'));
+
+        // 指定图表的配置项和数据
+        option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+//                data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+            },
+            series: [
+                {
+                    name:'搜索引擎访问次数',
+                    type:'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data:(function(){ //<![CDATA[
+                        var datas = [];
+                        $.ajax({
+                            type: "POST",
+                            url: "/imooc/course_searchclickcount_dynamic?datetime=20191109&searchengine=search.yahoo.com",
+                            dataType: 'json',
+                            async: false,
+                            success: function(result) {
+                                for(var i=0; i<result.length; i++) {
+                                    datas.push({"value":result[i].value, "name":result[i].name})
+                                }
+                            }
+                        })
+                        return datas;
+                        //]]>
+                    })()
+//                    ,
+//                    data:[
+//                        {value:335, name:'直接访问'},
+//                        {value:310, name:'邮件营销'},
+//                        {value:234, name:'联盟广告'},
+//                        {value:135, name:'视频广告'},
+//                        {value:1548, name:'搜索引擎'}
+//                    ]
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
     </script>
 </body>
 
