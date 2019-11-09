@@ -64,12 +64,19 @@ public class HBaseUtils {
         return table;
     }
 
+    /**
+     * 1.查询：通过日期：20191109，查询当前课程以及对应的个数
+     * @param tablename 表名
+     * @param dayCourse 日期20191109
+     * @return
+     * @throws Exception
+     */
     public Map<String,Long> query(String tablename, String dayCourse) throws Exception{
         Map<String,Long> map =new HashMap<>();
 
         HTable table=getTable(tablename);
         String cf="info";
-        String qualifier="  ";
+        String qualifier="click_count";
         Scan scan=new Scan();
 
         Filter filter=new PrefixFilter(Bytes.toBytes(dayCourse));
