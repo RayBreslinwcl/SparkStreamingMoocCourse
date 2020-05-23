@@ -77,7 +77,7 @@ object StreamingAppToHbase {
     }).reduceByKey(_+_).foreachRDD(RDD=>{
       RDD.foreachPartition(partitions=>{
 
-        //存储mysql(1)【20181223添加】
+        //存储mysql(1)
 //        val connection=MysqlUtils.createConnection()
 
         val list=new ListBuffer[CourseClickCount]
