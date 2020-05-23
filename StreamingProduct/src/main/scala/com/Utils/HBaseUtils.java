@@ -19,6 +19,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2018/11/22.
  * HBase操作工具类
+ * 单例模式返回工具类
  */
 public class HBaseUtils {
     HBaseAdmin admin=null;
@@ -40,13 +41,19 @@ public class HBaseUtils {
     }
 
 
-    private static HBaseUtils instance=null;
+    private volatile static HBaseUtils instance=null;
 
-    public static synchronized HBaseUtils getInstance(){
+    public static HBaseUtils getInstance(){
+
         if (instance==null){
-            instance=new HBaseUtils();
+           synchronized (HBaseUtils.class){
+               if(instance==null){
+                   instance=new HBaseUtils();
+               }
+           }
         }
         return  instance;
+
     }
 
     /**
