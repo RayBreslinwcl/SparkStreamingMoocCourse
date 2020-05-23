@@ -18,7 +18,7 @@ object Networkcount {
       */
     val ssc=new StreamingContext(sparkConf,Seconds(5))
 
-    val lines=ssc.socketTextStream("hadoop",6789)
+    val lines=ssc.socketTextStream("cdh3",6789)
 
     val result= lines.flatMap(_.split(" ")).map((_,1)).reduceByKey(_+_)
     result.print()
