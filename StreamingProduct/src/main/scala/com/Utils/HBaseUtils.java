@@ -23,9 +23,9 @@ public class HBaseUtils {
 
     private HBaseUtils(){
         configuration=new Configuration();
-        configuration.set("hbase.rootdir","hdfs://cdh1:8020/hbase");
-        configuration.set("hbase.zookeeper.quorum","cdh1");
-        configuration.set("hbase.zookeeper.property.clientPort","2181");
+        configuration.set("hbase.rootdir",PropertiesUtils.getProperties().getProperty("hbase.rootdir"));
+        configuration.set("hbase.zookeeper.quorum",PropertiesUtils.getProperties().getProperty("hbase.zookeeper.quorum"));
+        configuration.set("hbase.zookeeper.property.clientPort",PropertiesUtils.getProperties().getProperty("hbase.zookeeper.property.clientPort"));
 //        configuration.set("hbase.regionserver.dns.nameserver","hadoop");
 
         try {
