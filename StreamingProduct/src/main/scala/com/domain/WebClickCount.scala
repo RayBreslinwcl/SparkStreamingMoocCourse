@@ -8,4 +8,4 @@ package com.domain
   * @param day_course 对应的就是HBase中的rowkey
   * @param click_count 对应rowkey的访问总数
   */
-case class CourseClickCount (day_course:String,click_count:Long)
+case class WebClickCount(day_course:String, click_count:Long)

@@ -1,8 +1,8 @@
 package com.project
 
 import com.Utils.{DateUtils, MysqlUtils}
-import com.dao.{CourseClickCountDAO, CourseSearchClickCountDao}
-import com.domain.{Clicklog, CourseClickCount, CourseSearchClickCount}
+import com.dao.{WebClickCountDAO, WebSearchClickCountDao}
+import com.domain.{Clicklog, WebClickCount, WebSearchClickCount}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.KafkaUtils
@@ -80,15 +80,15 @@ object StreamingAppToHbase {
         //存储mysql(1)
 //        val connection=MysqlUtils.createConnection()
 
-        val list=new ListBuffer[CourseClickCount]
+        val list=new ListBuffer[WebClickCount]
         partitions.foreach(pair=>{
-          list.append(CourseClickCount(pair._1,pair._2))
+          list.append(WebClickCount(pair._1,pair._2))
           //存储mysql(2)【20181223添加】
 //          val sql=" insert into imooc_course_clickcount(day_course, click_count) values('" + pair._1 + "'," + pair._2 + ") on duplicate key update click_count=click_count+"+pair._2
 //          val sql=" insert into imooc_course_clickcount(day_course, course_id,click_count) values('" + pair._1 + "','"+ pair._1.substring(9,12) + "'," + pair._2 + ") on duplicate key update click_count=click_count+"+pair._2
 //          connection.createStatement().execute(sql)
         })
-        CourseClickCountDAO.save(list)
+        WebClickCountDAO.save(list)
 
       })
     })
@@ -110,11 +110,11 @@ object StreamingAppToHbase {
       (x._3.substring(0,8)+"_"+x._1+"_"+x._2,1)
     }).reduceByKey(_+_).foreachRDD(RDD=>{
       RDD.foreachPartition(partitions=>{
-        val list=new ListBuffer[CourseSearchClickCount]
+        val list=new ListBuffer[WebSearchClickCount]
         partitions.foreach(pair=>{
-          list.append(CourseSearchClickCount(pair._1,pair._2))
+          list.append(WebSearchClickCount(pair._1,pair._2))
         })
-        CourseSearchClickCountDao.save(list)
+        WebSearchClickCountDao.save(list)
       })
     })
 

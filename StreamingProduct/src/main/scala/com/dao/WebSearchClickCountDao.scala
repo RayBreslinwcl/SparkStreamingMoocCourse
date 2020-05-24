@@ -1,7 +1,7 @@
 package com.dao
 
 import com.Utils.HBaseUtils
-import com.domain.{CourseClickCount, CourseSearchClickCount}
+import com.domain.{WebClickCount, WebSearchClickCount}
 import org.apache.hadoop.hbase.client.Get
 import org.apache.hadoop.hbase.util.Bytes
 
@@ -9,10 +9,10 @@ import scala.collection.mutable.ListBuffer
 
 /**
   * Created by Administrator on 2018/11/24.
-  * 从搜索引擎过来的实战课程点击数的访问量
+  * 从搜索引擎过来的web点击数的访问量
   */
-object CourseSearchClickCountDao {
-  val tablename="imooc_course_search_clickcount"
+object WebSearchClickCountDao {
+  val tablename="web_search_clickcount"
   val cf="info"
   val qualifer="click_count"
 
@@ -20,7 +20,7 @@ object CourseSearchClickCountDao {
     * 保存数据到hbase
     * @param list CourseSearchClickCount集合
     */
-  def save(list:ListBuffer[CourseSearchClickCount])={
+  def save(list:ListBuffer[WebSearchClickCount])={
 
     val table=HBaseUtils.getInstance().getTable(tablename)
     for(ele<-list){
@@ -51,9 +51,9 @@ object CourseSearchClickCountDao {
   }
 
   def main(args: Array[String]): Unit = {
-    val list=new ListBuffer[CourseSearchClickCount]
-    list.append(CourseSearchClickCount("20191111_www.baidu.com_8",8))
-    list.append(CourseSearchClickCount("20191111_cn.bing.com_9",8))
+    val list=new ListBuffer[WebSearchClickCount]
+    list.append(WebSearchClickCount("20191111_www.baidu.com_8",8))
+    list.append(WebSearchClickCount("20191111_cn.bing.com_9",8))
 
     //测试一：保存【20191109测试成功】
     save(list)

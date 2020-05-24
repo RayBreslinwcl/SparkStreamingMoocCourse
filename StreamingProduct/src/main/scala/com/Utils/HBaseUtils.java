@@ -1,20 +1,15 @@
 package com.Utils;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
-import scala.tools.nsc.backend.icode.Opcodes;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-//import org.apache.hadoop.hbase.client.*;
-//import org.apache.hadoop.hbase.filter.Filter;
-//import org.apache.hadoop.hbase.filter.PrefixFilter;
-//import org.apache.hadoop.hbase.util.Bytes;
+
 
 /**
  * Created by Administrator on 2018/11/22.
@@ -28,8 +23,8 @@ public class HBaseUtils {
 
     private HBaseUtils(){
         configuration=new Configuration();
-        configuration.set("hbase.rootdir","hdfs://hadoop:8020/hbase");
-        configuration.set("hbase.zookeeper.quorum","hadoop");
+        configuration.set("hbase.rootdir","hdfs://cdh1:8020/hbase");
+        configuration.set("hbase.zookeeper.quorum","cdh1");
         configuration.set("hbase.zookeeper.property.clientPort","2181");
 //        configuration.set("hbase.regionserver.dns.nameserver","hadoop");
 
@@ -125,19 +120,15 @@ public class HBaseUtils {
 //        System.out.println(table.getName().getNameAsString());
 
 
-        //输入hbase测试【pass：20181124】
-        String tablename="imooc_course_clickcount";
+        //输入hbase测试
+        String tablename="web_clickcount";
         String rowkey="20181122_88";
         String cf="info";
         String column="click_count";
         String value="20";
-//        String tablename="nstest:student";
-//        String rowkey="1004";
-//        String cf="info";
-//        String column="age";
-//        String value="20";
+
         HBaseUtils hu=  HBaseUtils.getInstance();
-        HBaseUtils.getInstance().put(tablename,rowkey,cf,column,value);
+        hu.put(tablename,rowkey,cf,column,value);
 
 
     }
