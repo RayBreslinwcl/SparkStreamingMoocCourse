@@ -1,8 +1,8 @@
 package com.project
 
-import com.Utils.{DateUtils, MysqlUtils}
-import com.dao.{WebClickCountDAO, WebSearchClickCountDao}
-import com.domain.{Clicklog, WebClickCount, WebSearchClickCount}
+import com.Utils.DateUtils
+import com.dao.WebClickCountDAO
+import com.domain.{Clicklog, WebClickCount}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.streaming.kafka010.KafkaUtils
@@ -94,7 +94,7 @@ object StreamingAppToHbase {
     })
 
 
-    //第四步：统计从搜索殷勤过来的今天到现在为止实战课程的访问量
+    //第四步：统计从搜索殷勤过来的今天到现在为止web的访问量
     //原始数据 x.referer=https://search.yahoo.com/search?p=Storm实战-》目标search.yahoo.com
     //存储到hbase数据格式：20191109_www.baidu.com_131  column=info:click_count, timestamp=1573273644333, value=\x00\x00\x00\x00\x00\x00\x00\x02
 //    cleanData.map(x=>{
