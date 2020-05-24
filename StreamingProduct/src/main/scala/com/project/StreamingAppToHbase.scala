@@ -95,7 +95,7 @@ object StreamingAppToHbase {
 
 
     //第四步：统计从搜索殷勤过来的今天到现在为止web的访问量
-    //原始数据 x.referer=https://search.yahoo.com/search?p=Storm实战-》目标search.yahoo.com
+    //原始数据 x.referer=https://search.yahoo.com/search?p=在线培训-》目标search.yahoo.com
     //存储到hbase数据格式：20191109_www.baidu.com_131  column=info:click_count, timestamp=1573273644333, value=\x00\x00\x00\x00\x00\x00\x00\x02
 //    cleanData.map(x=>{
 //      val referer=x.referer.replaceAll("//","/")
