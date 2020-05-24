@@ -97,26 +97,26 @@ object StreamingAppToHbase {
     //第四步：统计从搜索殷勤过来的今天到现在为止实战课程的访问量
     //原始数据 x.referer=https://search.yahoo.com/search?p=Storm实战-》目标search.yahoo.com
     //存储到hbase数据格式：20191109_www.baidu.com_131  column=info:click_count, timestamp=1573273644333, value=\x00\x00\x00\x00\x00\x00\x00\x02
-    cleanData.map(x=>{
-      val referer=x.referer.replaceAll("//","/")
-      val splits=referer.split("/")
-      var host=""
-      if(splits.length>2){
-        host=splits(1)
-        }
-      (host,x.couserId,x.time)
-    }
-    ).filter(_._1!="").map(x=>{
-      (x._3.substring(0,8)+"_"+x._1+"_"+x._2,1)
-    }).reduceByKey(_+_).foreachRDD(RDD=>{
-      RDD.foreachPartition(partitions=>{
-        val list=new ListBuffer[WebSearchClickCount]
-        partitions.foreach(pair=>{
-          list.append(WebSearchClickCount(pair._1,pair._2))
-        })
-        WebSearchClickCountDao.save(list)
-      })
-    })
+//    cleanData.map(x=>{
+//      val referer=x.referer.replaceAll("//","/")
+//      val splits=referer.split("/")
+//      var host=""
+//      if(splits.length>2){
+//        host=splits(1)
+//        }
+//      (host,x.couserId,x.time)
+//    }
+//    ).filter(_._1!="").map(x=>{
+//      (x._3.substring(0,8)+"_"+x._1+"_"+x._2,1)
+//    }).reduceByKey(_+_).foreachRDD(RDD=>{
+//      RDD.foreachPartition(partitions=>{
+//        val list=new ListBuffer[WebSearchClickCount]
+//        partitions.foreach(pair=>{
+//          list.append(WebSearchClickCount(pair._1,pair._2))
+//        })
+//        WebSearchClickCountDao.save(list)
+//      })
+//    })
 
 
     ssc.start()
