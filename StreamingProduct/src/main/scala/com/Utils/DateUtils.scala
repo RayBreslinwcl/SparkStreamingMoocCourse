@@ -18,12 +18,21 @@ object DateUtils {
   }
 
   def parseToMinute(time:String) ={
-    TARGET_FORMAT.format(new Date(getTime(time)))
+    //异常处理：https://www.runoob.com/scala/scala-exception-handling.html
+    try {
+      TARGET_FORMAT.format(new Date(getTime(time)))
+    } catch {
+      case ex: Exception =>{
+        println("parseToMinute failed，time is "+ time )
+        "20200101"
+      }
+    }
+//    TARGET_FORMAT.format(new Date(getTime(time)))
   }
 
 
   def main(args: Array[String]): Unit = {
-    println(parseToMinute("2018-11-22 14:14:44"))
+    println(parseToMinute("手动发2018-11-22 14:14:444撒旦"))
   }
 
 }
